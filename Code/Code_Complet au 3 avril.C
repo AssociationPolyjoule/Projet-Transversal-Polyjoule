@@ -594,5 +594,3 @@ void Calcul_VitesseMoy(){
   Tparcouru=(Tactuel-Tdepart); //Calcul du temps passé depuis le départ
   VitMoy=(distance_parcourue/Tparcouru)*3600000; //Calcul de la vitesse moyenne
 }
-
-
