@@ -25,8 +25,8 @@
 
 /************************Definition des variables**********************************
 /*************************************Variable Temps**************************/
-int min = 0;
-int sec = 0;
+int min = 1;
+int sec = 1;
 int min_prec = 0;
 int sec_prec = 0;
 unsigned long Temps=0;
@@ -126,7 +126,6 @@ void setup() {
 
 
 
-
   //Allumage de l'écran
   analogWrite(LED, lum);
 
@@ -170,7 +169,9 @@ void setup() {
 void loop()
 {
   while (statut_compteur==true){
-    calcul_vitesse();
+    
+    
+    
     if (statut_rec==true){
       if (Vit>1){
         Tdepart=millis();
@@ -179,15 +180,15 @@ void loop()
           if (millis()%500==0){
             affiche_vit();
             calcul_distance();
-            T_dist1=millis();
             Calcul_VitesseMoy();
+            temps();
             affiche_VMoy();
             affiche_dis();
             affiche_temps();
             //Serial.println(Vit);
-            //Serial.print(",");
+            //Serial.print("/");
             //Serial.println(VitMoy);
-            //Serial.print(",");
+            //Serial.print("/");
             //Serial.println(distance_parcourue);
             Ttour = millis();
             Nv=0;
@@ -200,13 +201,37 @@ void loop()
           }
         }
       }
+      else if (millis()%500==0){
+            affiche_vit();
+            Ttour = millis();
+            Nv=0;
+            Vit_prec=Vit;
+            }
+      else
+          {
+          calcul_vitesse();
+          }
+    }
+    
+    else if (millis()%500==0){
+            affiche_vit();
+            VitMoy=0;
+            distance_parcourue=0;
+            Temps=0;
+            affiche_VMoy();
+            affiche_dis();
+            affiche_temps();
+            Ttour = millis();
+            Nv=0;
+            Vit_prec=Vit;
+            }
+    else{
+      calcul_vitesse();  
     }
   }
 
-
-
-
 }
+
 
 
 
@@ -342,7 +367,6 @@ void affiche_temps(){
   screen.setTextSize(1);
   screen.stroke(255,255,255);
   screen.text(":",17,115); //les 2 points de l'heure
-  temps();
  
   min_prec=min;
   sec_prec=sec;
@@ -474,8 +498,6 @@ void enregistrer(){//Enregistre les données dans le fichier initialisé préced
   monFichier.println(conso);
   monFichier.close();
 }
-
-
 
 
 void generation_nom(){//Fonction permettant de générer le nom du fichier en fonction de ce qui existe déja sur la carte
