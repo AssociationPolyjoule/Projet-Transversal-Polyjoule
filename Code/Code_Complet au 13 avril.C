@@ -158,6 +158,9 @@ void loop()
         T_dist1=millis();
         while(statut_rec==true){
           if (millis()%1000==0){
+            if (abs(Vit-Vit_prec)>=0.8){
+              Vit=(Vit+Vit_prec)/2;
+            }
             affiche_vit();
             calcul_distance();
             Calcul_VitesseMoy();
@@ -165,9 +168,9 @@ void loop()
             affiche_VMoy();
             affiche_dis();
             affiche_temps();
-            Serial.print(Vit);
+            Serial.println(Vit);
             Serial.print("/");
-            Serial.print(VitMoy);
+            Serial.println(VitMoy);
             Serial.print("/");
             Serial.println(distance_parcourue);
             Nv=0;
@@ -181,6 +184,9 @@ void loop()
         }
       }
       else if (millis()%1000==0){
+        if (abs(Vit-Vit_prec)>=0.8){
+              Vit=(Vit+Vit_prec)/2;
+            }
             affiche_vit();
             Nv=0;
             Vit_prec=Vit;
@@ -193,17 +199,20 @@ void loop()
     }
     
     else if (millis()%1000==0){
-            affiche_vit();
-            VitMoy=0;
-            distance_parcourue=0;
-            Temps=0;
-            affiche_VMoy();
-            affiche_dis();
-            affiche_temps();
-            Vit_prec=Vit;
-  Nv=0;
-Ttour = millis();
+      if (abs(Vit-Vit_prec)>=0.8){
+              Vit=(Vit+Vit_prec)/2;
             }
+      affiche_vit();
+      VitMoy=0;
+      distance_parcourue=0;
+      Temps=0;
+      affiche_VMoy();
+      affiche_dis();
+      affiche_temps();
+      Vit_prec=Vit;
+      Nv=0;
+      Ttour = millis();
+      }
     else{
       calcul_vitesse();  
     }
@@ -505,20 +514,20 @@ void calcul_vitesse(){
       Ttour = millis();
       Nv = 0; //Remise à 0 du nombre de bande passées
     }
-    else if (Vit > 7.0 and Vit<13 and Nv == 0.5*B) {
+    else if (Vit > 10.0 and Vit<13 and Nv == 0.5*B) {
       Tpresent = millis();
       Vit = (0.5*2*PI*R*3.6)/((Tpresent-Ttour)*0.001);//Calcul de la vitesse
       Ttour = millis();
       Nv = 0; //Remise à 0 du nombre de bande passées
     }
-    else if (Vit < 7.0 and Nv == 0.25*B) {
+    else if (Vit < 10.0 and Nv == 0.25*B) {
       Tpresent = millis();
       Vit = (0.25*2*PI*R*3.6)/((Tpresent-Ttour)*0.001);//Calcul de la vitesse
       Ttour = millis();
       Nv = 0; //Remise à 0 du nombre de bande passées
     }
   }
-  if (millis()-Tpresent >= 1000) { //Remise à 0 de la vitesse
+  if (millis()-Tpresent >= 1000 ) { //Remise à 0 de la vitesse
     Vit = 0;
     Nv = 0;
     Tpresent = millis();
